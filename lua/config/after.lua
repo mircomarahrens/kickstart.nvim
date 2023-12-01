@@ -16,7 +16,7 @@ vim.keymap.set("n", "<leader>fb", filebrowser.file_browser, { noremap = true })
 -- vim.keymap.set("n", "<leader>fb", function() filebrowser.file_browser() end, { noremap = true })
 vim.api.nvim_set_keymap(
   "n",
-  "<space>fb",
+  "<leader><leader>",
   ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
   { noremap = true }
 )
