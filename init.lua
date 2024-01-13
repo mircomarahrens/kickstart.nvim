@@ -1,4 +1,3 @@
-require('config.before.options')
+require('remaps')
 require('manager')
-require('config.after.options')
 
