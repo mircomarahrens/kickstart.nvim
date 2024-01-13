@@ -1,3 +1,17 @@
+-- leader
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+
+-- shortcuts
+vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
+
+-- linenumbers
+vim.wo.relativenumber = true
+vim.wo.number = true
+
+-- highlight
+vim.highlight.NonText = {cterm = 'none', ctermfg = '0',guifg = '#073642'}
+
 vim.opt.guicursor = ""
 
 vim.opt.nu = true
@@ -10,7 +24,9 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
-vim.opt.wrap = false
+vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.textwidth = 80
 
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -28,8 +44,12 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = '80'
 
+vim.opt.spell = true
+vim.opt.spelllang = { 'en_us' }
 -- listchars
 -- vim.opt.list = true
 -- vim.opt.listchars = { eol = '↵', tab = '>-', trail = '~', extends = '>', precedes = '<', space = '.' }
+
+

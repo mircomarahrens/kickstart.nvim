@@ -9,6 +9,15 @@ return {
         dependencies = { 'nvim-lua/plenary.nvim' }
     },
 
+    -- trouble.nvim is a pretty diagnostics, references, telescope results, quickfix and location list viewer
+    {"folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+    }},
+
     -- file browser
     {
         'nvim-telescope/telescope-file-browser.nvim',
@@ -28,17 +37,12 @@ return {
                 "c",
                 "cmake",
                 "cpp",
-                "html",
-                "javascript",
                 "json",
                 "lua",
                 "markdown",
                 "markdown_inline",
                 "python",
-                "query",
                 "regex",
-                "tsx",
-                "typescript",
                 "vim",
                 "toml",
                 "yaml",
