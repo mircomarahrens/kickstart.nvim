@@ -1,27 +1,27 @@
 return {
     -- lua package: https://github.com/nvim-lua/plenary.nvim
     {
-        'nvim-lua/plenary.nvim'
+        "nvim-lua/plenary.nvim"
     },
 
     -- telescope.nvim is a highly extendable fuzzy finder over lists.
     {
-        'nvim-telescope/telescope.nvim', tag = '0.1.4',
-        -- or                              , branch = '0.1.x',
-        dependencies = { 'nvim-lua/plenary.nvim' },
+        "nvim-telescope/telescope.nvim", tag = "0.1.4",
+        -- or                              , branch = "0.1.x",
+        dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
             -- telescope
             local builtin = require("telescope.builtin")
-            vim.keymap.set("n", '<leader>gf', builtin.git_files, { desc = 'Search [G]it [F]iles' })
-            vim.keymap.set("n", '<leader>ff', builtin.find_files, { desc = '[F]ind [F]iles' })
-            vim.keymap.set("n", '<leader>ps', function()
+            vim.keymap.set("n", "<leader>gf", builtin.git_files, { desc = "Search [G]it [F]iles" })
+            vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
+            vim.keymap.set("n", "<leader>ps", function()
                 builtin.grep_string({ search = vim.fn.input("Grep > ") });
             end
-            , { desc = '' })
+            , { desc = "" })
         end
     },
 
-    -- trouble.nvim is a pretty diagnostics, references, telescope results, quickfix and location list viewer
+    -- https://github.com/folke/trouble.nvim, trouble.nvim is a pretty diagnostics, references, telescope results, quickfix and location list viewer
     {
         "folke/trouble.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -29,23 +29,31 @@ return {
             -- your configuration comes here
             -- or leave it empty to use the default settings
             -- refer to the configuration section below
-        }
+        },
+        config = function()
+            -- TODO recheck bindings
+            vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end)
+            vim.keymap.set("n", "<leader>xw", function() require("trouble").toggle("workspace_diagnostics") end)
+            vim.keymap.set("n", "<leader>xd", function() require("trouble").toggle("document_diagnostics") end)
+            vim.keymap.set("n", "<leader>xq", function() require("trouble").toggle("quickfix") end)
+            vim.keymap.set("n", "<leader>xl", function() require("trouble").toggle("loclist") end)
+            vim.keymap.set("n", "gR", function() require("trouble").toggle("lsp_references") end)
+        end
     },
 
-    -- file browser
+     -- https://github.com/nvim-telescope/telescope.nvim, file browser
     {
-        'nvim-telescope/telescope-file-browser.nvim',
+       "nvim-telescope/telescope-file-browser.nvim",
         dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
         config = function()
             -- file-browser
             local filebrowser = require("telescope").extensions.file_browser
             vim.keymap.set("n", "<leader>fb", filebrowser.file_browser, { noremap = true })
-            -- vim.keymap.set("n", "<leader>fb", function() filebrowser.file_browser() end, { noremap = true })
             vim.api.nvim_set_keymap("n", "<leader><leader>", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", { noremap = true })
         end
     },
 
-    -- Distraction-free coding for Neovim
+    -- https://github.com/folke/zen-mode.nvim, Distraction-free coding for Neovim
     {
         "folke/zen-mode.nvim",
         opts = {
@@ -70,23 +78,22 @@ return {
         end
     },
 
-    -- GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.
+    -- https://github.com/github/copilot.vim, GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.
     {
-        'github/copilot.vim'
+        "github/copilot.vim"
     },
 
-    -- Tree-sitter is a parser generator tool and an incremental parsing library.
+    -- https://github.com/nvim-treesitter/nvim-treesitter, Tree-sitter is a parser generator tool and an incremental parsing library.
     {
-        'nvim-treesitter/nvim-treesitter',
+        "nvim-treesitter/nvim-treesitter",
         opts = {
             -- A list of parser names, or "all" (the five listed parsers should always be installed) 
             ensure_installed = {
                 "bash",
-                "c",
-                "cmake",
-                "cpp",
-                "json",
                 "lua",
+                "c",
+                "cpp",
+                "cmake",
                 "markdown",
                 "markdown_inline",
                 "python",
@@ -94,37 +101,38 @@ return {
                 "vim",
                 "toml",
                 "yaml",
+                "json",
             },
             -- Install parsers synchronously (only applied to `ensure_installed`)
             sync_install = false,
 
             -- Automatically install missing parsers when entering buffer
-            -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-            auto_install = true,
+            -- Recommendation: set to false if you don"t have `tree-sitter` CLI installed locally
+            auto_install = false,
 
             highlight = {
                 enable = true,
 
                 -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-                -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+                -- Set this to `true` if you depend on "syntax" being enabled (like for indentation).
                 -- Using this option may slow down your editor, and you may see some duplicate highlights.
                 -- Instead of true it can also be a list of languages
                 additional_vim_regex_highlighting = false,
             },
         },
-        run = ':TSUpdate'
+        run = ":TSUpdate"
     },
 
-    -- undotree
+    -- https://github.com/mbbill/undotree, Undotree visualizes the undo history
     {
-        'mbbill/undotree',
+        "mbbill/undotree",
         config = function()
             -- undotree
-            vim.keymap.set("n", '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle [U]ndo Tree' })
+            vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle, { desc = "Toggle [U]ndo Tree" })
         end
     },
 
-    -- which-key
+    -- https://github.com/folke/which-key.nvim, popup menu for possible keybindings
     {
         "folke/which-key.nvim",
         event = "VeryLazy",
@@ -139,21 +147,20 @@ return {
         }
     },
 
-    -- themes
+    -- https://github.com/folke/tokyonight.nvim, colorschemes
     {
         "folke/tokyonight.nvim",
         lazy = false,
         priority = 1000,
         opts = {},
         config = function()
-            -- colorscheme
-            vim.cmd('colorscheme tokyonight-moon')
+            vim.cmd("colorscheme tokyonight-moon")
         end
     },
 
-    -- file explorer
+    -- https://github.com/ThePrimeagen/harpoon, quick navigation between locations
     {
-        'ThePrimeagen/harpoon',
+        "ThePrimeagen/harpoon",
         config = function()
             local mark = require("harpoon.mark")
             local ui = require("harpoon.ui")
@@ -170,29 +177,30 @@ return {
     },
 
     {
-        'rust-lang/rust.vim'
+        "rust-lang/rust.vim"
     },
 
+    -- https://github.com/tpope/vim-fugitive, git plugin for vim
     {
-        'tpope/vim-fugitive',
+        "tpope/vim-fugitive",
         config = function()
-            -- fugitive
-            vim.keymap.set("n", "<leader>gs", vim.cmd.Git, { desc = 'Git [S]tatus' })
+            vim.keymap.set("n", "<leader>gs", vim.cmd.Git, { desc = "Git [S]tatus" })
+            -- TODO
         end
     },
 
     -- lsp-zero
     {
-        'williamboman/mason.nvim',
+        "williamboman/mason.nvim",
         config = function()
-            require('mason').setup({})
+            require("mason").setup({})
         end
     },
     {
-        'VonHeikemen/lsp-zero.nvim',
-        branch = 'v3.x',
+        "VonHeikemen/lsp-zero.nvim",
+        branch = "v3.x",
         config = function()
-            local lsp_zero = require('lsp-zero')
+            local lsp_zero = require("lsp-zero")
             lsp_zero.extend_lspconfig()
 
             lsp_zero.on_attach(function(client, bufnr)
@@ -212,64 +220,75 @@ return {
         end
     },
     {
-        'williamboman/mason-lspconfig.nvim',
+        "williamboman/mason-lspconfig.nvim",
         config = function()
-            local lsp_zero = require('lsp-zero')
-            require('mason-lspconfig').setup({
+            local lsp_zero = require("lsp-zero")
+            require("mason-lspconfig").setup({
                 ensure_installed = {
-                    'lua_ls',
-                    'cmake',
-                    'pylsp',
-                    'tsserver',
-                    'rust_analyzer'},
+                    "lua_ls",
+                    "clangd",
+                    "cmake",
+                    "pylsp",
+                    "tsserver",
+                    "rust_analyzer"},
                     handlers = {
                         lsp_zero.default_setup,
                         lua_ls = function()
                             local lua_opts = lsp_zero.nvim_lua_ls()
-                            require('lspconfig').lua_ls.setup(lua_opts)
+                            require("lspconfig").lua_ls.setup(lua_opts)
                         end,
                     }
                 })
 
-                local cmp = require('cmp')
+                local cmp = require("cmp")
                 local cmp_select = {behavior = cmp.SelectBehavior.Select}
 
                 cmp.setup({
                     sources = {
-                        {name = 'path'},
-                        {name = 'nvim_lsp'},
-                        {name = 'nvim_lua'},
+                        {name = "path"},
+                        {name = "nvim_lsp"},
+                        {name = "nvim_lua"},
                     },
                     formatting = lsp_zero.cmp_format(),
                     mapping = cmp.mapping.preset.insert({
-                        ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                        ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                        ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-                        ['<C-Space>'] = cmp.mapping.complete(),
+                        ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+                        ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+                        ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+                        ["<C-Space>"] = cmp.mapping.complete(),
                     }),
                 })
             end
         },
 
         {
-            'neovim/nvim-lspconfig'
-        },
-        {
-            'hrsh7th/cmp-nvim-lsp'
-        },
-        {
-            'hrsh7th/nvim-cmp'
-        },
-        {
-            'L3MON4D3/LuaSnip'
-        },
-        {
-            'nvim-lualine/lualine.nvim',
-            dependencies = { 'nvim-tree/nvim-web-devicons' },
+            "neovim/nvim-lspconfig",
             config = function()
-                require('lualine').setup {
+                local lspconfig = require("lspconfig")
+                local on_attach = lspconfig.on_attach
+                local capabilities = lspconfig.capabilities
+
+                lspconfig.clangd.setup {
+                    on_attach = function(client, bufnr)
+                    end
+                }
+            end
+        },
+        {
+            "hrsh7th/cmp-nvim-lsp"
+        },
+        {
+            "hrsh7th/nvim-cmp"
+        },
+        {
+            "L3MON4D3/LuaSnip"
+        },
+        {
+            "nvim-lualine/lualine.nvim",
+            dependencies = { "nvim-tree/nvim-web-devicons" },
+            config = function()
+                require("lualine").setup {
                     options = {
-                        theme = 'tokyonight'
+                        theme = "tokyonight"
                     }
                 }
             end
