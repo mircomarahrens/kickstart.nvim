@@ -263,14 +263,7 @@ return {
         {
             "neovim/nvim-lspconfig",
             config = function()
-                local lspconfig = require("lspconfig")
-                local on_attach = lspconfig.on_attach
-                local capabilities = lspconfig.capabilities
-
-                lspconfig.clangd.setup {
-                    on_attach = function(client, bufnr)
-                    end
-                }
+            -- TODO
             end
         },
         {
