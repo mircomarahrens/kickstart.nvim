@@ -8,30 +8,55 @@ return {
     -- https://github.com/nvim-telescope/telescope.nvim
     -- telescope.nvim is a highly extendable fuzzy finder over lists.
     {
-        "nvim-telescope/telescope.nvim", tag = "0.1.4",
-        dependencies = { "nvim-lua/plenary.nvim" },
+        "nvim-telescope/telescope.nvim",
+        tag = "0.1.4",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            { "nvim-telescope/telescope-fzf-native.nvim", build = "make"},
+            "nvim-tree/nvim-web-devicons",
+        },
         config = function()
+            local telescope = require("telescope")
+
+            telescope.load_extension("fzf")
+
+            local actions = require("telescope.actions")
+
+            telescope.setup({
+                defaults = {
+                    mappings = {
+                        i = {
+                            ["<C-k>"] = actions.move_selection_previous, -- move to prev result
+                            ["<C-j>"] = actions.move_selection_next, -- move to next result
+                            ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+                        },
+                    },
+                },
+            })
+
+            -- set keymaps
+            local keymap = vim.keymap -- for conciseness
             local builtin = require("telescope.builtin")
-            vim.keymap.set("n", "<leader>gf", builtin.git_files, { desc = "Search [G]it [F]iles" })
-            vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
-            vim.keymap.set("n", "<leader>ps", function()
-                builtin.grep_string({ search = vim.fn.input("Grep > ") });
-            end
-            , { desc = "" })
+
+            keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Find [R]ecent [F]iles" })
+            keymap.set("n", "<leader>fs", builtin.live_grep, { desc = "[F]ind [S]tring in current working directory" })
+            keymap.set("n", "<leader>fc", builtin.grep_string, { desc = "[F]ind string under [C]ursor in current working directory" })
+            keymap.set("n", "<leader>gf", builtin.git_files, { desc = "Search [G]it [F]iles" })
+            keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
         end
     },
 
-     -- https://github.com/nvim-telescope/telescope.nvim
-     -- file browser
-     {
+    -- https://github.com/nvim-telescope/telescope.nvim
+    -- file browser
+    {
         "nvim-telescope/telescope-file-browser.nvim",
-         dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
-         config = function()
-             local filebrowser = require("telescope").extensions.file_browser
-             vim.keymap.set("n", "<leader>fb", filebrowser.file_browser, { noremap = true })
-             vim.api.nvim_set_keymap("n", "<leader><leader>", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", { noremap = true })
-         end
-     },
+        dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+        config = function()
+            local filebrowser = require("telescope").extensions.file_browser
+            vim.keymap.set("n", "<leader>fb", filebrowser.file_browser, { noremap = true })
+            vim.api.nvim_set_keymap("n", "<leader><leader>", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", { noremap = true })
+        end
+    },
 
     -- https://github.com/mbbill/undotree
     -- Undotree visualizes the undo history
@@ -51,11 +76,6 @@ return {
             vim.o.timeout = true
             vim.o.timeoutlen = 299
         end,
-        opts = {
-            -- your configuration comes here
-            -- or leave it empty to use the default settings
-            -- refer to the configuration section below
-        }
     },
 
     -- https://github.com/folke/trouble.nvim
@@ -63,11 +83,6 @@ return {
     {
         "folke/trouble.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
-        opts = {
-            -- your configuration comes here
-            -- or leave it empty to use the default settings
-            -- refer to the configuration section below
-        },
         config = function()
             -- TODO recheck bindings
             vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end)
@@ -83,11 +98,6 @@ return {
     -- Distraction-free coding for Neovim
     {
         "folke/zen-mode.nvim",
-        opts = {
-            -- your configuration comes here
-            -- or leave it empty to use the default settings
-            -- refer to the configuration section below
-        },
         config = function()
             -- zen-mode
             vim.keymap.set("n", "<leader>zz", function()
@@ -183,17 +193,30 @@ return {
         end
     },
 
+    -- https://github.com/williamboman/mason.nvim
+    -- Mason is a plugin for Neovim that provides a simple way to manage your projects.
     {
-        "rust-lang/rust.vim"
+        "williamboman/mason.nvim",
+        config = function()
+            require("mason").setup({})
+        end
     },
 
-    -- https://github.com/tpope/vim-fugitive
-    -- git plugin for vim
+    -- https://github.com/williamboman/mason-lspconfig.nvim
+    -- mason-lspconfig bridges mason.nvim with the lspconfig plugin
     {
-        "tpope/vim-fugitive",
+        "williamboman/mason-lspconfig.nvim",
         config = function()
-            vim.keymap.set("n", "<leader>gs", vim.cmd.Git, { desc = "Git [S]tatus" })
-            -- TODO
+            require("mason-lspconfig").setup({
+                ensure_installed = {
+                    "lua_ls",
+                    "clangd",
+                    "cmake",
+                    "pylsp",
+                    "tsserver",
+                    "rust_analyzer"
+                },
+            })
         end
     },
 
@@ -222,82 +245,93 @@ return {
             end)
         end
     },
-
-    -- https://github.com/williamboman/mason.nvim
-    -- Mason is a plugin for Neovim that provides a simple way to manage your projects.
-    {
-        "williamboman/mason.nvim",
-        config = function()
-            require("mason").setup({})
-        end
-    },
-
     
-    -- https://github.com/williamboman/mason-lspconfig.nvim
-    -- mason-lspconfig bridges mason.nvim with the lspconfig plugin
-    {
-        "williamboman/mason-lspconfig.nvim",
-        config = function()
-            local lsp_zero = require("lsp-zero")
-            require("mason-lspconfig").setup({
-                ensure_installed = {
-                    "lua_ls",
-                    "clangd",
-                    "cmake",
-                    "pylsp",
-                    "tsserver",
-                    "rust_analyzer"},
-                    handlers = {
-                        lsp_zero.default_setup,
-                        lua_ls = function()
-                            local lua_opts = lsp_zero.nvim_lua_ls()
-                            require("lspconfig").lua_ls.setup(lua_opts)
-                        end,
-                    }
-                })
-
-            local cmp = require("cmp")
-            local cmp_select = {behavior = cmp.SelectBehavior.Select}
-
-            cmp.setup({
-                sources = {
-                    {name = "path"},
-                    {name = "nvim_lsp"},
-                    {name = "nvim_lua"},
-                },
-                formatting = lsp_zero.cmp_format(),
-                mapping = cmp.mapping.preset.insert({
-                    ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-                    ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-                    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-                    ["<C-Space>"] = cmp.mapping.complete(),
-                }),
-            })
-        end
-    },
-
     -- https://github.com/neovim/nvim-lspconfig
     -- Collection of configurations for built-in LSP client
     {
         "neovim/nvim-lspconfig",
         config = function()
-        -- TODO
+            local lspconfig = require("lspconfig")
+            local lsp_zero = require("lsp-zero")
+            lsp_zero.extend_lspconfig()
+
+            lspconfig.lua_ls.setup({})
+            lspconfig.clangd.setup({})
+            lspconfig.cmake.setup({})
+            lspconfig.pylsp.setup({})
+            lspconfig.tsserver.setup({})
+            lspconfig.rust_analyzer.setup({})
         end
     },
 
     -- https://github.com/hrsh7th/cmp-nvim-lsp
     -- nvim-cmp source for neovim builtin LSP client
     {
-        "hrsh7th/cmp-nvim-lsp"
-    },
-    {
-        "hrsh7th/nvim-cmp"
+        "hrsh7th/nvim-cmp",
+        event = "InsertEnter",
+        dependencies = {
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-nvim-lsp",
+            "saadparwaiz1/cmp_luasnip",
+            "L3MON4D3/LuaSnip",
+            "rafamadriz/friendly-snippets",
+        },
+        config = function()
+            local cmp = require("cmp")
+            local luasnip = require("luasnip")
+
+            require("luasnip/loaders/from_vscode").lazy_load()
+
+            cmp.setup({
+                completion = { completeopt = "menu,menuone,preview,noselect"},
+                -- configure how nvim-cmp interacts with the snippet engine
+                snippet = {
+                    expand = function(args)
+                        luasnip.lsp_expand(args.body)
+                    end,
+                },
+                mapping = {
+                    ["<C-k>"] = cmp.mapping.select_prev_item(),
+                    ["<C-j>"] = cmp.mapping.select_next_item(),
+                    ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+                    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+                    ["<C-Space>"] = cmp.mapping.complete(),
+                    ["<C-e>"] = cmp.mapping.abort(),
+                    ["<CR>"] = cmp.mapping.confirm({ select = false }),
+                    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+                },
+                -- source for autocompletion
+                sources = {
+                    -- snippet
+                    { name = "luasnip" },
+                    -- text within current buffer
+                    { name = "buffer" },
+                    -- file system paths
+                    { name = "path" },
+                },
+            })
+        end,
     },
 
-    -- https://github.com/L3MON4D3/LuaSnip
-    -- Snippet Engine for Neovim written in Lua.
     {
-        "L3MON4D3/LuaSnip"
+        "rust-lang/rust.vim"
+    },
+
+    -- https://github.com/tpope/vim-fugitive
+    -- git plugin for vim
+    {
+        "tpope/vim-fugitive",
+        config = function()
+            vim.keymap.set("n", "<leader>gs", vim.cmd.Git, { desc = "Git [S]tatus" })
+            vim.keymap.set("n", "<leader>ga", vim.cmd.Gwrite, { desc = "Git [A]dd" })
+            vim.keymap.set("n", "<leader>gc", vim.cmd.Gcommit, { desc = "Git [C]ommit" })
+            vim.keymap.set("n", "<leader>gp", vim.cmd.Gpush, { desc = "Git [P]ush" })
+            vim.keymap.set("n", "<leader>gl", vim.cmd.Gpull, { desc = "Git [P]ull" })
+            vim.keymap.set("n", "<leader>gb", vim.cmd.Gblame, { desc = "Git [B]lame" })
+            vim.keymap.set("n", "<leader>gd", vim.cmd.Gdiff, { desc = "Git [D]iff" })
+            -- TODO
+        end
     },
 
     -- https://github.com/nvim-lualine/lualine.nvim
