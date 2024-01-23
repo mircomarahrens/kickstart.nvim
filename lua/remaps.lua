@@ -3,7 +3,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- shortcuts
-vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
+vim.keymap.set('n', '<leader>ex', vim.cmd.Ex)
 
 -- linenumbers
 vim.wo.relativenumber = true
@@ -50,5 +50,4 @@ vim.opt.spelllang = { 'en_us' }
 -- listchars
 -- vim.opt.list = true
 -- vim.opt.listchars = { eol = '↵', tab = '>-', trail = '~', extends = '>', precedes = '<', space = '.' }
-
 
