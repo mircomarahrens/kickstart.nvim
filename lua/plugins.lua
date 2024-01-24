@@ -246,7 +246,7 @@ return {
                         local lua_opts = lsp_zero.nvim_lua_ls()
                         lspconfig.lua_ls.setup(lua_opts)
                     end,
-               },
+                },
             })
         end
     },
@@ -462,5 +462,26 @@ return {
                 }
             }
         end
+    },
+
+
+    -- https://github.com/christoomey/vim-tmux-navigator
+    -- Seamless navigation between tmux panes and vim splits
+    {
+        "christoomey/vim-tmux-navigator",
+        cmd = {
+            "TmuxNavigateLeft",
+            "TmuxNavigateDown",
+            "TmuxNavigateUp",
+            "TmuxNavigateRight",
+            "TmuxNavigatePrevious",
+        },
+        keys = {
+            { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+            { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+            { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+            { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+            { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+        },
     },
 }
