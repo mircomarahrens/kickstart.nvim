@@ -1,3 +1,3 @@
-require('remaps')
+require('keymaps')
 require('manager')
 
