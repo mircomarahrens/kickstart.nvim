@@ -70,13 +70,19 @@ return {
         keymap.set("n", "<leader>gf", builtin.git_files, { desc = "Search [G]it [F]iles" })
         keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
 
-        telescope.load_extension('neoclip')
-        -- telescope.load_extension('ui-select')
         vim.g.zoxide_use_select = true
         telescope.load_extension("undo")
         telescope.load_extension("advanced_git_search")
         telescope.load_extension("live_grep_args")
         telescope.load_extension("noice")
+
+        -- file browser
+        telescope.load_extension("file_browser")
+
+        local filebrowser = require("telescope").extensions.file_browser
+
+        vim.keymap.set("n", "<leader>fb", filebrowser.file_browser, { noremap = true })
+        vim.api.nvim_set_keymap("n", "<leader><leader>", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", { noremap = true })
     end
 }
 

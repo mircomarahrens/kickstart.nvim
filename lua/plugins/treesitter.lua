@@ -2,6 +2,7 @@
 -- Tree-sitter is a parser generator tool and an incremental parsing library.
 return {
     "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
     opts = {
         -- A list of parser names, or "all" (the five listed parsers should always be installed) 
         ensure_installed = {
@@ -35,6 +36,5 @@ return {
             -- Instead of true it can also be a list of languages
             additional_vim_regex_highlighting = false,
         },
-    },
-    run = ":TSUpdate"
+    }
 }

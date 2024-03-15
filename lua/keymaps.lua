@@ -1,53 +1,24 @@
--- leader
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+-- other keymaps
+vim.keymap.set('n', '<leader>xx', vim.cmd.Ex, { noremap = true }) -- back to netrw
+vim.keymap.set('n', '<leader>tb', ':exec &bg=="light"? "set bg=dark" : "set bg=light"<CR>', { noremap = true, silent = true}) -- toggle background
 
--- shortcuts
-vim.keymap.set('n', '<leader>ex', vim.cmd.Ex)
+-- Keybinds to make split navigation easier.
+--  Use CTRL+<hjkl> to switch between windows
+--
+--  See `:help wincmd` for a list of all window commands
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
--- linenumbers
-vim.wo.relativenumber = true
-vim.wo.number = true
+-- vim.keymap.set('n', '<leader>q', ':q<CR>', { noremap = true }) -- close window
+-- vim.keymap.set('n', '<leader>Q', ':qa<CR>', { noremap = true }) -- close all windows
 
--- highlight
-vim.highlight.NonText = {cterm = 'none', ctermfg = '0',guifg = '#073642'}
-
-vim.opt.guicursor = ""
-
-vim.opt.nu = true
-vim.opt.relativenumber = true
-
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-
-vim.opt.smartindent = true
-
-vim.opt.wrap = true
-vim.opt.linebreak = true
--- vim.opt.textwidth = 80
--- vim.opt.colorcolumn = '80'
-
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
-vim.opt.undofile = true
-
-vim.opt.hlsearch = false
-vim.opt.incsearch = true
-
-vim.opt.termguicolors = true
-
-vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
-vim.opt.isfname:append("@-@")
-
-vim.opt.updatetime = 50
-
-vim.opt.spell = true
-vim.opt.spelllang = { 'en_us' }
--- listchars
--- vim.opt.list = true
--- vim.opt.listchars = { eol = '↵', tab = '>-', trail = '~', extends = '>', precedes = '<', space = '.' }
-
+-- Keybinds for git
+-- vim.keymap.set('n', '<leader>gs', ":Git<CR>", { noremap = true }) -- open git status
+--                    ["<leader>ga"] = "Gwrite",
+--                    ["<leader>gc"] = "Gcommit",
+--                    ["<leader>gp"] = "Gpush",
+--                    ["<leader>gl"] = "Gpull",
+--                    ["<leader>gb"] = "Gblame",
+--                    ["<leader>gd"] = "Gdiff",
