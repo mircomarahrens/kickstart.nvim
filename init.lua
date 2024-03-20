@@ -21,4 +21,4 @@ require('lazy').setup('plugins')
 -- loading config
 require('keymaps')
 require('options')
-
+require('autocmds')

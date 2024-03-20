@@ -1,6 +1,12 @@
+return {
+    {
+        -- https://github.com/rust-lang/rust.vim
+        -- Rust support for Vim
+        "rust-lang/rust.vim"
+    },
 -- https://github.com/ray-x/go.nvim
 -- Go (Golang) development plugin for Neovim
-return {
+{
     "ray-x/go.nvim",
     dependencies = {  -- optional packages
         "ray-x/guihua.lua",
@@ -13,4 +19,5 @@ return {
     event = {"CmdlineEnter"},
     ft = {"go", 'gomod'},
     build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+},
 }
