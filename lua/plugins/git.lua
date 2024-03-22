@@ -17,5 +17,21 @@ return {
             vim.keymap.set("n", "<leader>gt", "<cmd>Gitsigns toggle_current_line_blame<CR>")
 
         end
-    }
+    },
+    {
+        "kdheepak/lazygit.nvim",
+        cmd = {
+            "LazyGit",
+            "LazyGitConfig",
+            "LazyGitCurrentFile",
+
+            "LazyGitFilter",
+            "LazyGitFilterCurrentFile",
+        },
+        -- optional for floating window border decoration
+
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+    },
 }
