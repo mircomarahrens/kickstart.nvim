@@ -39,6 +39,8 @@ return {
                 ensure_installed = {
                     "clangd",
                     "cmake",
+                    "dockerls",
+                    "pyright",
                     "pylsp",
                     "gopls",
                     "rust_analyzer"
